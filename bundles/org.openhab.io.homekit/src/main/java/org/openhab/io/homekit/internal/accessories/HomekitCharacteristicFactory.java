@@ -142,6 +142,7 @@ public class HomekitCharacteristicFactory {
     // METHODS TO CREATE SINGLE CHARACTERISTIC FROM OH ITEM
 
     // supporting methods
+    @SuppressWarnings("null")
     private static <T extends CharacteristicEnum> CompletableFuture<T> getEnumFromItem(GenericItem item, T offEnum,
             T onEnum, T defaultEnum) {
         final State state = item.getState();
@@ -179,6 +180,7 @@ public class HomekitCharacteristicFactory {
         }
     }
 
+    @SuppressWarnings("null")
     public static Supplier<CompletableFuture<Integer>> getCompletedFutureInt(GenericItem item) {
         return () -> {
             int value = 0;
@@ -200,8 +202,8 @@ public class HomekitCharacteristicFactory {
     }
 
     public static Supplier<CompletableFuture<Double>> getCompletedFutureDouble(Item item) {
-        return () -> CompletableFuture.completedFuture(
-                item.getStateAs(DecimalType.class) != null ? item.getStateAs(DecimalType.class).doubleValue() : 0.0);
+        final DecimalType value = item.getStateAs(DecimalType.class);
+        return () -> CompletableFuture.completedFuture(value != null ? value.doubleValue() : 0.0);
     }
 
     // create method for characteristic
@@ -253,7 +255,7 @@ public class HomekitCharacteristicFactory {
     private static NameCharacteristic createNameCharacteristic(final GenericItem item,
             HomekitAccessoryUpdater updater) {
         return new NameCharacteristic(
-                () -> CompletableFuture.completedFuture(item.getState() != null ? item.getState().toString() : ""));
+                () -> CompletableFuture.completedFuture(item.getState().toString()));
     }
 
     private static HoldPositionCharacteristic createHoldPositionCharacteristic(final GenericItem item,
@@ -322,11 +324,9 @@ public class HomekitCharacteristicFactory {
     private static HueCharacteristic createHueCharacteristic(final GenericItem item, HomekitAccessoryUpdater updater) {
         return new HueCharacteristic(() -> {
             Double value = 0.0;
-            if (item != null) {
-                State state = item.getState();
-                if (state instanceof HSBType) {
-                    value = ((HSBType) state).getHue().doubleValue();
-                }
+            State state = item.getState();
+            if (state instanceof HSBType) {
+                value = ((HSBType) state).getHue().doubleValue();
             }
             return CompletableFuture.completedFuture(value);
         }, (hue) -> {
@@ -396,9 +396,10 @@ public class HomekitCharacteristicFactory {
 
     private static CurrentFanStateCharacteristic createCurrentFanStateCharacteristic(final GenericItem item,
             HomekitAccessoryUpdater updater) {
+        final DecimalType value = item.getStateAs(DecimalType.class);
         return new CurrentFanStateCharacteristic(
-                () -> CompletableFuture.completedFuture(item.getStateAs(DecimalType.class) != null
-                        ? CurrentFanStateEnum.fromCode(item.getStateAs(DecimalType.class).intValue())
+                () -> CompletableFuture.completedFuture( value != null
+                        ? CurrentFanStateEnum.fromCode(value.intValue())
                         : CurrentFanStateEnum.INACTIVE),
                 (callback) -> updater.subscribe(item, CURRENT_FAN_STATE.getTag(), callback),
                 () -> updater.unsubscribe(item, CURRENT_FAN_STATE.getTag()));
@@ -406,9 +407,10 @@ public class HomekitCharacteristicFactory {
 
     private static TargetFanStateCharacteristic createTargetFanStateCharacteristic(final GenericItem item,
             HomekitAccessoryUpdater updater) {
+        final DecimalType value = item.getStateAs(DecimalType.class);
         return new TargetFanStateCharacteristic(
-                () -> CompletableFuture.completedFuture(item.getStateAs(DecimalType.class) != null
-                        ? TargetFanStateEnum.fromCode(item.getStateAs(DecimalType.class).intValue())
+                () -> CompletableFuture.completedFuture(value != null
+                        ? TargetFanStateEnum.fromCode(value.intValue())
                         : TargetFanStateEnum.AUTO),
                 (targetState) -> item.setState(new DecimalType(targetState.getCode())),
                 (callback) -> updater.subscribe(item, TARGET_FAN_STATE.getTag(), callback),

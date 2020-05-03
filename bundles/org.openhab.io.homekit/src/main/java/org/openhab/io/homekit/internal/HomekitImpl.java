@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import io.github.hapjava.accessories.HomekitAccessory;
+import io.github.hapjava.server.impl.HomekitRoot;
+import io.github.hapjava.server.impl.HomekitServer;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.config.core.ConfigurableService;
@@ -38,10 +41,6 @@ import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.github.hapjava.accessories.HomekitAccessory;
-import io.github.hapjava.server.impl.HomekitRoot;
-import io.github.hapjava.server.impl.HomekitServer;
 
 /**
  * Provides access to openHAB items via the HomeKit API
@@ -117,6 +116,7 @@ public class HomekitImpl implements Homekit {
     }
 
     private void startBridge() throws InvalidAlgorithmParameterException, IOException {
+        final HomekitServer homekitServer = this.homekitServer;
         if (homekitServer != null && bridge == null) {
             final HomekitRoot bridge = homekitServer.createBridge(new HomekitAuthInfoImpl(storageService, settings.pin),
                     settings.name, HomekitSettings.MANUFACTURER,
@@ -161,6 +161,7 @@ public class HomekitImpl implements Homekit {
 
     @Override
     public void refreshAuthInfo() throws IOException {
+        final HomekitRoot bridge = this.bridge;
         if (bridge != null) {
             bridge.refreshAuthInfo();
         }
@@ -168,6 +169,7 @@ public class HomekitImpl implements Homekit {
 
     @Override
     public void allowUnauthenticatedRequests(boolean allow) {
+        final HomekitRoot bridge = this.bridge;
         if (bridge != null) {
             bridge.allowUnauthenticatedRequests(allow);
         }

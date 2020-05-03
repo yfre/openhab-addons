@@ -131,7 +131,7 @@ abstract class AbstractHomekitAccessoryImpl implements HomekitAccessory {
         }
     }
 
-    protected @Nullable <T extends State> T getStateAs(HomekitCharacteristicType characteristic, Class type) {
+    protected @Nullable <T extends State> T getStateAs(HomekitCharacteristicType characteristic, Class<T> type) {
         final Optional<HomekitTaggedItem> taggedItem = getCharacteristic(characteristic);
         if (taggedItem.isPresent()) {
             final State state = taggedItem.get().getItem().getStateAs(type);
@@ -148,7 +148,7 @@ abstract class AbstractHomekitAccessoryImpl implements HomekitAccessory {
         final Optional<HomekitTaggedItem> taggedItem = getCharacteristic(characteristic);
         if (taggedItem.isPresent()) {
             if (type.isInstance(taggedItem.get().getItem()))
-                return (T) getCharacteristic(characteristic).get().getItem();
+                return (T) taggedItem.get().getItem();
             else
                 logger.warn("Unsupported item type for characteristic {} at accessory {}. Expected {}, got {}",
                         characteristic, accessory.getItem().getLabel(), type, taggedItem.get().getItem().getClass());
@@ -162,8 +162,11 @@ abstract class AbstractHomekitAccessoryImpl implements HomekitAccessory {
 
     protected <T> T getAccessoryConfiguration(String key, T defaultValue) {
         final @Nullable Map<String, Object> configuration = accessory.getConfiguration();
-        if ((configuration != null) && (configuration.get(key) != null)) {
-            return (T) configuration.get(key);
+        if (configuration != null) {
+            Object value = configuration.get(key);
+            if (defaultValue.getClass().equals(value.getClass())) {
+                return (T) value;
+            }
         }
         return defaultValue;
     }

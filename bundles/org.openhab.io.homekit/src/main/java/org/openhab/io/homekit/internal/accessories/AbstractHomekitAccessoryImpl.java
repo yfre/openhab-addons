@@ -144,6 +144,7 @@ abstract class AbstractHomekitAccessoryImpl implements HomekitAccessory {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     protected @Nullable <T extends Item> T getItem(HomekitCharacteristicType characteristic, Class<T> type) {
         final Optional<HomekitTaggedItem> taggedItem = getCharacteristic(characteristic);
         if (taggedItem.isPresent()) {
@@ -160,11 +161,12 @@ abstract class AbstractHomekitAccessoryImpl implements HomekitAccessory {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     protected <T> T getAccessoryConfiguration(String key, T defaultValue) {
         final @Nullable Map<String, Object> configuration = accessory.getConfiguration();
         if (configuration != null) {
             Object value = configuration.get(key);
-            if (defaultValue.getClass().equals(value.getClass())) {
+            if (value != null && defaultValue != null && value.getClass().equals(defaultValue.getClass())) {
                 return (T) value;
             }
         }

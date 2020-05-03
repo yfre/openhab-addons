@@ -80,6 +80,7 @@ import io.github.hapjava.characteristics.impl.windowcovering.TargetVerticalTiltA
  * @author Eugen Freiter - Initial contribution
  */
 @NonNullByDefault
+@SuppressWarnings("deprecation")
 public class HomekitCharacteristicFactory {
     private static final Logger logger = LoggerFactory.getLogger(HomekitCharacteristicFactory.class);
 

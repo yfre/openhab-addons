@@ -59,6 +59,7 @@ import io.github.hapjava.services.Service;
  * @author Eugen Freiter - refactoring for optional characteristics
  */
 @NonNullByDefault
+@SuppressWarnings("deprecation")
 public class HomekitAccessoryFactory {
     private static final Logger logger = LoggerFactory.getLogger(HomekitAccessoryFactory.class);
     public final static String METADATA_KEY = "homekit"; // prefix for HomeKit meta information in items.xml
@@ -170,6 +171,7 @@ public class HomekitAccessoryFactory {
         AbstractHomekitAccessoryImpl accessoryImpl;
 
         try {
+            @Nullable
             final Class<? extends AbstractHomekitAccessoryImpl> accessoryImplClass = SERVICE_IMPL_MAP.get(accessoryType);
             if (accessoryImplClass != null) {
                 accessoryImpl = accessoryImplClass
@@ -218,12 +220,10 @@ public class HomekitAccessoryFactory {
                         type = OLD_DIMMABLE_LIGHTBULB;
                     }
                 }
-                if ((meta.length > 1) && (HomekitCharacteristicType.valueOfTag(meta[1].trim()).isPresent())) { // it has
-                                                                                                               // characteristic
-                                                                                                               // as
-                                                                                                               // well
+                if (meta.length > 1) {
+                    // it has characteristic as well
                     accessories
-                            .add(new SimpleEntry<>(type, HomekitCharacteristicType.valueOfTag(meta[1].trim()).get()));
+                            .add(new SimpleEntry<>(type, HomekitCharacteristicType.valueOfTag(meta[1].trim()).orElse(EMPTY)));
                 } else {// it has no characteristic
                     accessories.add(new SimpleEntry<>(type, EMPTY));
                 }
@@ -388,6 +388,7 @@ public class HomekitAccessoryFactory {
      * @param characteristic characteristic
      * @return true if characteristic is mandatory, false if not mandatory
      */
+    @SuppressWarnings("null")
     private static boolean isMandatoryCharacteristic(HomekitAccessoryType accessory,
             HomekitCharacteristicType characteristic) {
         return MANDATORY_CHARACTERISTICS.get(accessory) != null && Arrays
@@ -400,6 +401,7 @@ public class HomekitAccessoryFactory {
      * @param accessory accessory
      * @return true if accessory has not characteristic.
      */
+    @SuppressWarnings("null")
     private static boolean isRootAccessory(Entry<HomekitAccessoryType, HomekitCharacteristicType> accessory) {
         return ((accessory.getValue() == null) || (accessory.getValue() == EMPTY));
     }
@@ -411,6 +413,7 @@ public class HomekitAccessoryFactory {
      * @param characteristicType characteristic to check
      * @return new characteristic type
      */
+    @SuppressWarnings("null")
     private static HomekitCharacteristicType legacyCheck(final HomekitCharacteristicType characteristicType) {
         if (LEGACY_CHARACTERISTICS_MAPPING.get(characteristicType) != null)
             return LEGACY_CHARACTERISTICS_MAPPING.get(characteristicType);

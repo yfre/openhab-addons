@@ -16,11 +16,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.github.hapjava.accessories.HomekitAccessory;
-import io.github.hapjava.server.impl.HomekitRoot;
 import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.github.hapjava.accessories.HomekitAccessory;
+import io.github.hapjava.server.impl.HomekitRoot;
 
 /**
  * Stores the created HomekitAccessories. GroupedAccessories are also held here

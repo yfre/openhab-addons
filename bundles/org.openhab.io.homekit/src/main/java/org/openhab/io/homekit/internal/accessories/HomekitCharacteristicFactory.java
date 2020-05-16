@@ -49,6 +49,12 @@ import io.github.hapjava.characteristics.Characteristic;
 import io.github.hapjava.characteristics.CharacteristicEnum;
 import io.github.hapjava.characteristics.ExceptionalConsumer;
 import io.github.hapjava.characteristics.HomekitCharacteristicChangeCallback;
+import io.github.hapjava.characteristics.impl.airquality.NitrogenDioxideDensityCharacteristic;
+import io.github.hapjava.characteristics.impl.airquality.OzoneDensityCharacteristic;
+import io.github.hapjava.characteristics.impl.airquality.PM10DensityCharacteristic;
+import io.github.hapjava.characteristics.impl.airquality.PM25DensityCharacteristic;
+import io.github.hapjava.characteristics.impl.airquality.SulphurDioxideDensityCharacteristic;
+import io.github.hapjava.characteristics.impl.airquality.VOCDensityCharacteristic;
 import io.github.hapjava.characteristics.impl.audio.VolumeCharacteristic;
 import io.github.hapjava.characteristics.impl.battery.StatusLowBatteryCharacteristic;
 import io.github.hapjava.characteristics.impl.battery.StatusLowBatteryEnum;
@@ -64,6 +70,8 @@ import io.github.hapjava.characteristics.impl.common.StatusFaultEnum;
 import io.github.hapjava.characteristics.impl.common.StatusTamperedCharacteristic;
 import io.github.hapjava.characteristics.impl.common.StatusTamperedEnum;
 import io.github.hapjava.characteristics.impl.fan.*;
+import io.github.hapjava.characteristics.impl.humiditysensor.CurrentRelativeHumidityCharacteristic;
+import io.github.hapjava.characteristics.impl.humiditysensor.TargetRelativeHumidityCharacteristic;
 import io.github.hapjava.characteristics.impl.lightbulb.BrightnessCharacteristic;
 import io.github.hapjava.characteristics.impl.lightbulb.ColorTemperatureCharacteristic;
 import io.github.hapjava.characteristics.impl.lightbulb.HueCharacteristic;
@@ -124,6 +132,15 @@ public class HomekitCharacteristicFactory {
             put(COOLING_THRESHOLD_TEMPERATURE, HomekitCharacteristicFactory::createCoolingThresholdCharacteristic);
             put(HEATING_THRESHOLD_TEMPERATURE, HomekitCharacteristicFactory::createHeatingThresholdCharacteristic);
             put(REMAINING_DURATION, HomekitCharacteristicFactory::createRemainingDurationCharacteristic);
+            put(OZONE_DENSITY, HomekitCharacteristicFactory::createOzoneDensityCharacteristic);
+            put(NITROGEN_DIOXIDE_DENSITY, HomekitCharacteristicFactory::createNitrogenDioxideDensityCharacteristic);
+            put(SULPHUR_DIOXIDE_DENSITY, HomekitCharacteristicFactory::createSulphurDioxideDensityCharacteristic);
+            put(PM25_DENSITY, HomekitCharacteristicFactory::createPM25DensityCharacteristic);
+            put(PM10_DENSITY, HomekitCharacteristicFactory::createPM10DensityCharacteristic);
+            put(VOC_DENSITY, HomekitCharacteristicFactory::createVOCDensityCharacteristic);
+            put(RELATIVE_HUMIDITY, HomekitCharacteristicFactory::createHumidityCharacteristic);
+            put(TARGET_RELATIVE_HUMIDITY, HomekitCharacteristicFactory::createTargetHumidityCharacteristic);
+
             // LEGACY
             put(OLD_BATTERY_LOW_STATUS, HomekitCharacteristicFactory::createStatusLowBatteryCharacteristic);
         }
@@ -563,5 +580,62 @@ public class HomekitCharacteristicFactory {
                 getDoubleSupplier(taggedItem), setDoubleConsumer(taggedItem),
                 getSubscriber(taggedItem, HEATING_THRESHOLD_TEMPERATURE, updater),
                 getUnsubscriber(taggedItem, HEATING_THRESHOLD_TEMPERATURE, updater));
+    }
+
+    private static OzoneDensityCharacteristic createOzoneDensityCharacteristic(final HomekitTaggedItem taggedItem,
+            HomekitAccessoryUpdater updater) {
+        return new OzoneDensityCharacteristic(getDoubleSupplier(taggedItem),
+                                              getSubscriber(taggedItem, OZONE_DENSITY, updater),
+                                              getUnsubscriber(taggedItem, OZONE_DENSITY,updater));
+    }
+
+    private static NitrogenDioxideDensityCharacteristic createNitrogenDioxideDensityCharacteristic(
+            final HomekitTaggedItem taggedItem, HomekitAccessoryUpdater updater) {
+        return new NitrogenDioxideDensityCharacteristic(getDoubleSupplier(taggedItem),
+                                                        getSubscriber(taggedItem, NITROGEN_DIOXIDE_DENSITY, updater),
+                                                        getUnsubscriber(taggedItem, NITROGEN_DIOXIDE_DENSITY, updater));
+    }
+
+    private static SulphurDioxideDensityCharacteristic createSulphurDioxideDensityCharacteristic(final HomekitTaggedItem taggedItem,
+            HomekitAccessoryUpdater updater) {
+        return new SulphurDioxideDensityCharacteristic(getDoubleSupplier(taggedItem),
+                                                       getSubscriber(taggedItem, SULPHUR_DIOXIDE_DENSITY, updater),
+                                                       getUnsubscriber(taggedItem, SULPHUR_DIOXIDE_DENSITY, updater));
+    }
+
+    private static PM25DensityCharacteristic createPM25DensityCharacteristic(final HomekitTaggedItem taggedItem,
+            HomekitAccessoryUpdater updater) {
+        return new PM25DensityCharacteristic(getDoubleSupplier(taggedItem),
+                                             getSubscriber(taggedItem, PM25_DENSITY, updater),
+                                             getUnsubscriber(taggedItem, PM25_DENSITY, updater));
+    }
+
+    private static PM10DensityCharacteristic createPM10DensityCharacteristic(final HomekitTaggedItem taggedItem,
+            HomekitAccessoryUpdater updater) {
+        return new PM10DensityCharacteristic(getDoubleSupplier(taggedItem),
+                                             getSubscriber(taggedItem, PM10_DENSITY, updater),
+                                             getUnsubscriber(taggedItem, PM10_DENSITY, updater));
+    }
+
+    private static VOCDensityCharacteristic createVOCDensityCharacteristic(final HomekitTaggedItem taggedItem,
+            HomekitAccessoryUpdater updater) {
+        return new VOCDensityCharacteristic(getDoubleSupplier(taggedItem),
+                                            getSubscriber(taggedItem, VOC_DENSITY, updater),
+                                            getUnsubscriber(taggedItem, VOC_DENSITY, updater));
+    }
+
+    private static CurrentRelativeHumidityCharacteristic createHumidityCharacteristic(final HomekitTaggedItem taggedItem,
+        HomekitAccessoryUpdater updater) {
+        return new CurrentRelativeHumidityCharacteristic(getDoubleSupplier(taggedItem),
+                                                         getSubscriber(taggedItem, RELATIVE_HUMIDITY, updater),
+                                                         getUnsubscriber(taggedItem, RELATIVE_HUMIDITY, updater));
+    }
+
+    private static TargetRelativeHumidityCharacteristic createTargetHumidityCharacteristic(final HomekitTaggedItem taggedItem,
+        HomekitAccessoryUpdater updater) {
+        return new TargetRelativeHumidityCharacteristic(getDoubleSupplier(taggedItem),
+                                                        setDoubleConsumer(taggedItem),
+                                                        getSubscriber(taggedItem, RELATIVE_HUMIDITY, updater),
+                                                        getUnsubscriber(taggedItem, RELATIVE_HUMIDITY, updater));
     }
 }

@@ -44,6 +44,13 @@ public class HomekitSettings {
     public String doorCurrentStateStopped = "STOPPED";
     public String doorTargetStateClosed = "CLOSED";
     public String doorTargetStateOpen = "OPEN";
+
+    public String airQualityUnknown = "Unknown";
+    public String airQualityExcellent = "Excellent";
+    public String airQualityGood = "Good";
+    public String airQualityFair = "Fair";
+    public String airQualityInferior = "Inferior";
+    public String airQualityPoor = "Poor";
     public String networkInterface;
 
     @Deprecated

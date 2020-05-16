@@ -93,6 +93,7 @@ public class HomekitAccessoryFactory {
                     new HomekitCharacteristicType[] { CURRENT_DOOR_STATE, TARGET_DOOR_STATE, OBSTRUCTION_STATUS });
             put(HEATER_COOLER, new HomekitCharacteristicType[] { ACTIVE_STATUS, CURRENT_HEATER_COOLER_STATE,
                     TARGET_HEATER_COOLER_STATE, CURRENT_TEMPERATURE });
+            put(AIR_QUALITY_SENSOR, new HomekitCharacteristicType[] { AIR_QUALITY });
             // LEGACY
             put(BLINDS, new HomekitCharacteristicType[] { TARGET_POSITION, CURRENT_POSITION, POSITION_STATE });
             put(OLD_HUMIDITY_SENSOR, new HomekitCharacteristicType[] { RELATIVE_HUMIDITY });
@@ -124,6 +125,7 @@ public class HomekitAccessoryFactory {
             put(OUTLET, HomekitOutletImpl.class);
             put(SPEAKER, HomekitSpeakerImpl.class);
             put(GARAGE_DOOR_OPENER, HomekitGarageDoorOpenerImpl.class);
+            put(AIR_QUALITY_SENSOR, HomekitAirQualitySensorImpl.class);
             put(BLINDS, HomekitWindowCoveringImpl.class);
             put(HEATER_COOLER, HomekitHeaterCoolerImpl.class);
             put(OLD_HUMIDITY_SENSOR, HomekitHumiditySensorImpl.class);

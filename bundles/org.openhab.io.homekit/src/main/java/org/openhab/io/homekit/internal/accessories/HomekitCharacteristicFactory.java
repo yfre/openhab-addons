@@ -585,57 +585,52 @@ public class HomekitCharacteristicFactory {
     private static OzoneDensityCharacteristic createOzoneDensityCharacteristic(final HomekitTaggedItem taggedItem,
             HomekitAccessoryUpdater updater) {
         return new OzoneDensityCharacteristic(getDoubleSupplier(taggedItem),
-                                              getSubscriber(taggedItem, OZONE_DENSITY, updater),
-                                              getUnsubscriber(taggedItem, OZONE_DENSITY,updater));
+                getSubscriber(taggedItem, OZONE_DENSITY, updater), getUnsubscriber(taggedItem, OZONE_DENSITY, updater));
     }
 
     private static NitrogenDioxideDensityCharacteristic createNitrogenDioxideDensityCharacteristic(
             final HomekitTaggedItem taggedItem, HomekitAccessoryUpdater updater) {
         return new NitrogenDioxideDensityCharacteristic(getDoubleSupplier(taggedItem),
-                                                        getSubscriber(taggedItem, NITROGEN_DIOXIDE_DENSITY, updater),
-                                                        getUnsubscriber(taggedItem, NITROGEN_DIOXIDE_DENSITY, updater));
+                getSubscriber(taggedItem, NITROGEN_DIOXIDE_DENSITY, updater),
+                getUnsubscriber(taggedItem, NITROGEN_DIOXIDE_DENSITY, updater));
     }
 
-    private static SulphurDioxideDensityCharacteristic createSulphurDioxideDensityCharacteristic(final HomekitTaggedItem taggedItem,
-            HomekitAccessoryUpdater updater) {
+    private static SulphurDioxideDensityCharacteristic createSulphurDioxideDensityCharacteristic(
+            final HomekitTaggedItem taggedItem, HomekitAccessoryUpdater updater) {
         return new SulphurDioxideDensityCharacteristic(getDoubleSupplier(taggedItem),
-                                                       getSubscriber(taggedItem, SULPHUR_DIOXIDE_DENSITY, updater),
-                                                       getUnsubscriber(taggedItem, SULPHUR_DIOXIDE_DENSITY, updater));
+                getSubscriber(taggedItem, SULPHUR_DIOXIDE_DENSITY, updater),
+                getUnsubscriber(taggedItem, SULPHUR_DIOXIDE_DENSITY, updater));
     }
 
     private static PM25DensityCharacteristic createPM25DensityCharacteristic(final HomekitTaggedItem taggedItem,
             HomekitAccessoryUpdater updater) {
         return new PM25DensityCharacteristic(getDoubleSupplier(taggedItem),
-                                             getSubscriber(taggedItem, PM25_DENSITY, updater),
-                                             getUnsubscriber(taggedItem, PM25_DENSITY, updater));
+                getSubscriber(taggedItem, PM25_DENSITY, updater), getUnsubscriber(taggedItem, PM25_DENSITY, updater));
     }
 
     private static PM10DensityCharacteristic createPM10DensityCharacteristic(final HomekitTaggedItem taggedItem,
             HomekitAccessoryUpdater updater) {
         return new PM10DensityCharacteristic(getDoubleSupplier(taggedItem),
-                                             getSubscriber(taggedItem, PM10_DENSITY, updater),
-                                             getUnsubscriber(taggedItem, PM10_DENSITY, updater));
+                getSubscriber(taggedItem, PM10_DENSITY, updater), getUnsubscriber(taggedItem, PM10_DENSITY, updater));
     }
 
     private static VOCDensityCharacteristic createVOCDensityCharacteristic(final HomekitTaggedItem taggedItem,
             HomekitAccessoryUpdater updater) {
         return new VOCDensityCharacteristic(getDoubleSupplier(taggedItem),
-                                            getSubscriber(taggedItem, VOC_DENSITY, updater),
-                                            getUnsubscriber(taggedItem, VOC_DENSITY, updater));
+                getSubscriber(taggedItem, VOC_DENSITY, updater), getUnsubscriber(taggedItem, VOC_DENSITY, updater));
     }
 
-    private static CurrentRelativeHumidityCharacteristic createHumidityCharacteristic(final HomekitTaggedItem taggedItem,
-        HomekitAccessoryUpdater updater) {
+    private static CurrentRelativeHumidityCharacteristic createHumidityCharacteristic(
+            final HomekitTaggedItem taggedItem, HomekitAccessoryUpdater updater) {
         return new CurrentRelativeHumidityCharacteristic(getDoubleSupplier(taggedItem),
-                                                         getSubscriber(taggedItem, RELATIVE_HUMIDITY, updater),
-                                                         getUnsubscriber(taggedItem, RELATIVE_HUMIDITY, updater));
+                getSubscriber(taggedItem, RELATIVE_HUMIDITY, updater),
+                getUnsubscriber(taggedItem, RELATIVE_HUMIDITY, updater));
     }
 
-    private static TargetRelativeHumidityCharacteristic createTargetHumidityCharacteristic(final HomekitTaggedItem taggedItem,
-        HomekitAccessoryUpdater updater) {
-        return new TargetRelativeHumidityCharacteristic(getDoubleSupplier(taggedItem),
-                                                        setDoubleConsumer(taggedItem),
-                                                        getSubscriber(taggedItem, RELATIVE_HUMIDITY, updater),
-                                                        getUnsubscriber(taggedItem, RELATIVE_HUMIDITY, updater));
+    private static TargetRelativeHumidityCharacteristic createTargetHumidityCharacteristic(
+            final HomekitTaggedItem taggedItem, HomekitAccessoryUpdater updater) {
+        return new TargetRelativeHumidityCharacteristic(getDoubleSupplier(taggedItem), setDoubleConsumer(taggedItem),
+                getSubscriber(taggedItem, RELATIVE_HUMIDITY, updater),
+                getUnsubscriber(taggedItem, RELATIVE_HUMIDITY, updater));
     }
 }

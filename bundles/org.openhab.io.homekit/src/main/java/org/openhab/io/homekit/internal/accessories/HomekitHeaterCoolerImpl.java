@@ -29,7 +29,6 @@ import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.library.types.StringType;
-import org.eclipse.smarthome.core.types.State;
 import org.openhab.io.homekit.internal.HomekitAccessoryUpdater;
 import org.openhab.io.homekit.internal.HomekitCharacteristicType;
 import org.openhab.io.homekit.internal.HomekitSettings;
@@ -96,8 +95,7 @@ public class HomekitHeaterCoolerImpl extends AbstractHomekitAccessoryImpl implem
 
     @Override
     public CompletableFuture<Boolean> isActive() {
-        final @Nullable State state = getStateAs(HomekitCharacteristicType.ACTIVE_STATUS, OnOffType.class);
-        return CompletableFuture.completedFuture(state == OnOffType.ON);
+        return CompletableFuture.completedFuture(activeReader.getValue() == Boolean.TRUE);
     }
 
     @Override

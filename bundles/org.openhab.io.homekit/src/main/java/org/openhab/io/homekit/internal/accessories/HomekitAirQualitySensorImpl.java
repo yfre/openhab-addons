@@ -12,13 +12,14 @@
  */
 package org.openhab.io.homekit.internal.accessories;
 
+import static org.openhab.io.homekit.internal.HomekitCharacteristicType.AIR_QUALITY;
+
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.openhab.io.homekit.internal.HomekitAccessoryUpdater;
-import org.openhab.io.homekit.internal.HomekitCharacteristicType;
 import org.openhab.io.homekit.internal.HomekitSettings;
 import org.openhab.io.homekit.internal.HomekitTaggedItem;
 import org.slf4j.Logger;
@@ -50,22 +51,23 @@ public class HomekitAirQualitySensorImpl extends AbstractHomekitAccessoryImpl im
     public HomekitAirQualitySensorImpl(HomekitTaggedItem taggedItem, List<HomekitTaggedItem> mandatoryCharacteristics,
             HomekitAccessoryUpdater updater, HomekitSettings settings) throws IncompleteAccessoryException {
         super(taggedItem, mandatoryCharacteristics, updater, settings);
+        updateMapping(AIR_QUALITY, qualityStateMapping);
         getServices().add(new AirQualityService(this));
     }
 
     @Override
     public CompletableFuture<AirQualityEnum> getAirQuality() {
-        return CompletableFuture.completedFuture(
-                getKeyFromMapping(HomekitCharacteristicType.AIR_QUALITY, qualityStateMapping, AirQualityEnum.UNKNOWN));
+        return CompletableFuture
+                .completedFuture(getKeyFromMapping(AIR_QUALITY, qualityStateMapping, AirQualityEnum.UNKNOWN));
     }
 
     @Override
     public void subscribeAirQuality(final HomekitCharacteristicChangeCallback callback) {
-        subscribe(HomekitCharacteristicType.AIR_QUALITY, callback);
+        subscribe(AIR_QUALITY, callback);
     }
 
     @Override
     public void unsubscribeAirQuality() {
-        unsubscribe(HomekitCharacteristicType.AIR_QUALITY);
+        unsubscribe(AIR_QUALITY);
     }
 }

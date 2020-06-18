@@ -94,6 +94,14 @@ public class HomekitAccessoryFactory {
             put(HEATER_COOLER, new HomekitCharacteristicType[] { ACTIVE_STATUS, CURRENT_HEATER_COOLER_STATE,
                     TARGET_HEATER_COOLER_STATE, CURRENT_TEMPERATURE });
             put(AIR_QUALITY_SENSOR, new HomekitCharacteristicType[] { AIR_QUALITY });
+            put(AIR_PURIFIER, new HomekitCharacteristicType[] { ACTIVE_STATUS, CURRENT_AIR_PURIFIER_STATE,
+                    TARGET_AIR_PURIFIER_STATE });
+            put(WINDOW, new HomekitCharacteristicType[] { CURRENT_POSITION, TARGET_POSITION, POSITION_STATE });
+            put(DOOR, new HomekitCharacteristicType[] { CURRENT_POSITION, TARGET_POSITION, POSITION_STATE });
+            put(SLAT, new HomekitCharacteristicType[] { CURRENT_SLAT_STATE });
+            put(HUMIDIFIER_DEHUMIDIFIER,
+                    new HomekitCharacteristicType[] { ACTIVE_STATUS, CURRENT_HUMIDIFIER_DEHUMIDIFIER_STATE,
+                            TARGET_HUMIDIFIER_DEHUMIDIFIER_STATE, CURRENT_RELATIVE_HUMIDITY });
             // LEGACY
             put(BLINDS, new HomekitCharacteristicType[] { TARGET_POSITION, CURRENT_POSITION, POSITION_STATE });
             put(OLD_HUMIDITY_SENSOR, new HomekitCharacteristicType[] { RELATIVE_HUMIDITY });
@@ -128,6 +136,11 @@ public class HomekitAccessoryFactory {
             put(AIR_QUALITY_SENSOR, HomekitAirQualitySensorImpl.class);
             put(BLINDS, HomekitWindowCoveringImpl.class);
             put(HEATER_COOLER, HomekitHeaterCoolerImpl.class);
+            put(AIR_PURIFIER, HomekitAirPurifierImpl.class);
+            put(DOOR, HomekitDoorImpl.class);
+            put(WINDOW, HomekitWindowImpl.class);
+            put(SLAT, HomekitSlatImpl.class);
+            put(HUMIDIFIER_DEHUMIDIFIER, HomekitHumidifierDehumidifierImpl.class);
             put(OLD_HUMIDITY_SENSOR, HomekitHumiditySensorImpl.class);
             put(OLD_DIMMABLE_LIGHTBULB, HomekitLightbulbImpl.class);
             put(OLD_COLORFUL_LIGHTBULB, HomekitLightbulbImpl.class);

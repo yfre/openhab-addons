@@ -69,13 +69,18 @@ import io.github.hapjava.characteristics.impl.common.StatusFaultCharacteristic;
 import io.github.hapjava.characteristics.impl.common.StatusFaultEnum;
 import io.github.hapjava.characteristics.impl.common.StatusTamperedCharacteristic;
 import io.github.hapjava.characteristics.impl.common.StatusTamperedEnum;
+import io.github.hapjava.characteristics.impl.common.WaterLavelCharacteristic;
 import io.github.hapjava.characteristics.impl.fan.*;
+import io.github.hapjava.characteristics.impl.humidifier.HumidityDehumidifierThresholdCharacteristic;
+import io.github.hapjava.characteristics.impl.humidifier.HumidityHumidifierThresholdCharacteristic;
 import io.github.hapjava.characteristics.impl.humiditysensor.CurrentRelativeHumidityCharacteristic;
 import io.github.hapjava.characteristics.impl.humiditysensor.TargetRelativeHumidityCharacteristic;
 import io.github.hapjava.characteristics.impl.lightbulb.BrightnessCharacteristic;
 import io.github.hapjava.characteristics.impl.lightbulb.ColorTemperatureCharacteristic;
 import io.github.hapjava.characteristics.impl.lightbulb.HueCharacteristic;
 import io.github.hapjava.characteristics.impl.lightbulb.SaturationCharacteristic;
+import io.github.hapjava.characteristics.impl.slat.CurrentTiltAngleCharacteristic;
+import io.github.hapjava.characteristics.impl.slat.TargetTiltAngleCharacteristic;
 import io.github.hapjava.characteristics.impl.thermostat.CoolingThresholdTemperatureCharacteristic;
 import io.github.hapjava.characteristics.impl.thermostat.HeatingThresholdTemperatureCharacteristic;
 import io.github.hapjava.characteristics.impl.valve.RemainingDurationCharacteristic;
@@ -117,6 +122,8 @@ public class HomekitCharacteristicFactory {
             put(TARGET_HORIZONTAL_TILT_ANGLE,
                     HomekitCharacteristicFactory::createTargetHorizontalTiltAngleCharacteristic);
             put(TARGET_VERTICAL_TILT_ANGLE, HomekitCharacteristicFactory::createTargetVerticalTiltAngleCharacteristic);
+            put(CURRENT_TILT_ANGLE, HomekitCharacteristicFactory::createCurrentTiltAngleCharacteristic);
+            put(TARGET_TILT_ANGLE, HomekitCharacteristicFactory::createTargetTiltAngleCharacteristic);
             put(HUE, HomekitCharacteristicFactory::createHueCharacteristic);
             put(BRIGHTNESS, HomekitCharacteristicFactory::createBrightnessCharacteristic);
             put(SATURATION, HomekitCharacteristicFactory::createSaturationCharacteristic);
@@ -139,8 +146,12 @@ public class HomekitCharacteristicFactory {
             put(PM10_DENSITY, HomekitCharacteristicFactory::createPM10DensityCharacteristic);
             put(VOC_DENSITY, HomekitCharacteristicFactory::createVOCDensityCharacteristic);
             put(RELATIVE_HUMIDITY, HomekitCharacteristicFactory::createHumidityCharacteristic);
+            put(CURRENT_RELATIVE_HUMIDITY, HomekitCharacteristicFactory::createHumidityCharacteristic);
             put(TARGET_RELATIVE_HUMIDITY, HomekitCharacteristicFactory::createTargetHumidityCharacteristic);
-
+            put(HUMIDIFIER_THRESHOLD_HUMIDITY, HomekitCharacteristicFactory::createHumidifierThresholdCharacteristic);
+            put(DEHUMIDIFIER_THRESHOLD_HUMIDITY,
+                    HomekitCharacteristicFactory::createDehumidifierThresholdCharacteristic);
+            put(WATER_LEVEL, HomekitCharacteristicFactory::createWaterLevelCharacteristic);
             // LEGACY
             put(OLD_BATTERY_LOW_STATUS, HomekitCharacteristicFactory::createStatusLowBatteryCharacteristic);
         }
@@ -242,14 +253,16 @@ public class HomekitCharacteristicFactory {
     private static Supplier<CompletableFuture<Double>> getDoubleSupplier(final HomekitTaggedItem taggedItem) {
         return () -> {
             final DecimalType value = taggedItem.getItem().getStateAs(DecimalType.class);
-            return CompletableFuture.completedFuture(value != null ? value.doubleValue() : 0.0);
+            final double multiplier = taggedItem.getConfigurationAsDouble(HomekitTaggedItem.MULTIPLIER, 1);
+            return CompletableFuture.completedFuture(value != null ? value.doubleValue() * multiplier : 0.0);
         };
     }
 
     private static ExceptionalConsumer<Double> setDoubleConsumer(final HomekitTaggedItem taggedItem) {
         return (value) -> {
+            final double multiplier = taggedItem.getConfigurationAsDouble(HomekitTaggedItem.MULTIPLIER, 1);
             if (taggedItem.getItem() instanceof NumberItem) {
-                ((NumberItem) taggedItem.getItem()).send(new DecimalType(value));
+                ((NumberItem) taggedItem.getItem()).send(new DecimalType(value / multiplier));
             } else {
                 logger.warn("Item type {} is not supported for {}. Only Number type is supported.",
                         taggedItem.getItem().getType(), taggedItem.getName());
@@ -378,6 +391,20 @@ public class HomekitCharacteristicFactory {
         return new TargetVerticalTiltAngleCharacteristic(getIntSupplier(taggedItem), setIntConsumer(taggedItem),
                 getSubscriber(taggedItem, TARGET_HORIZONTAL_TILT_ANGLE, updater),
                 getUnsubscriber(taggedItem, TARGET_HORIZONTAL_TILT_ANGLE, updater));
+    }
+
+    private static CurrentTiltAngleCharacteristic createCurrentTiltAngleCharacteristic(
+            final HomekitTaggedItem taggedItem, HomekitAccessoryUpdater updater) {
+        return new CurrentTiltAngleCharacteristic(getIntSupplier(taggedItem),
+                getSubscriber(taggedItem, CURRENT_TILT_ANGLE, updater),
+                getUnsubscriber(taggedItem, CURRENT_TILT_ANGLE, updater));
+    }
+
+    private static TargetTiltAngleCharacteristic createTargetTiltAngleCharacteristic(final HomekitTaggedItem taggedItem,
+            HomekitAccessoryUpdater updater) {
+        return new TargetTiltAngleCharacteristic(getIntSupplier(taggedItem), setIntConsumer(taggedItem),
+                getSubscriber(taggedItem, TARGET_TILT_ANGLE, updater),
+                getUnsubscriber(taggedItem, TARGET_TILT_ANGLE, updater));
     }
 
     private static HueCharacteristic createHueCharacteristic(final HomekitTaggedItem taggedItem,
@@ -630,7 +657,27 @@ public class HomekitCharacteristicFactory {
     private static TargetRelativeHumidityCharacteristic createTargetHumidityCharacteristic(
             final HomekitTaggedItem taggedItem, HomekitAccessoryUpdater updater) {
         return new TargetRelativeHumidityCharacteristic(getDoubleSupplier(taggedItem), setDoubleConsumer(taggedItem),
-                getSubscriber(taggedItem, RELATIVE_HUMIDITY, updater),
-                getUnsubscriber(taggedItem, RELATIVE_HUMIDITY, updater));
+                getSubscriber(taggedItem, TARGET_RELATIVE_HUMIDITY, updater),
+                getUnsubscriber(taggedItem, TARGET_RELATIVE_HUMIDITY, updater));
+    }
+
+    private static HumidityHumidifierThresholdCharacteristic createHumidifierThresholdCharacteristic(
+            final HomekitTaggedItem taggedItem, HomekitAccessoryUpdater updater) {
+        return new HumidityHumidifierThresholdCharacteristic(getDoubleSupplier(taggedItem),
+                setDoubleConsumer(taggedItem), getSubscriber(taggedItem, HUMIDIFIER_THRESHOLD_HUMIDITY, updater),
+                getUnsubscriber(taggedItem, HUMIDIFIER_THRESHOLD_HUMIDITY, updater));
+    }
+
+    private static HumidityDehumidifierThresholdCharacteristic createDehumidifierThresholdCharacteristic(
+            final HomekitTaggedItem taggedItem, HomekitAccessoryUpdater updater) {
+        return new HumidityDehumidifierThresholdCharacteristic(getDoubleSupplier(taggedItem),
+                setDoubleConsumer(taggedItem), getSubscriber(taggedItem, DEHUMIDIFIER_THRESHOLD_HUMIDITY, updater),
+                getUnsubscriber(taggedItem, DEHUMIDIFIER_THRESHOLD_HUMIDITY, updater));
+    }
+
+    private static WaterLavelCharacteristic createWaterLevelCharacteristic(final HomekitTaggedItem taggedItem,
+            HomekitAccessoryUpdater updater) {
+        return new WaterLavelCharacteristic(getDoubleSupplier(taggedItem),
+                getSubscriber(taggedItem, WATER_LEVEL, updater), getUnsubscriber(taggedItem, WATER_LEVEL, updater));
     }
 }

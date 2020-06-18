@@ -52,6 +52,7 @@ public enum HomekitCharacteristicType {
     CARBON_DIOXIDE_PEAK_LEVEL("CarbonDioxidePeakLevel"),
 
     RELATIVE_HUMIDITY("RelativeHumidity"),
+    CURRENT_RELATIVE_HUMIDITY("CurrentRelativeHumidity"),
     TARGET_RELATIVE_HUMIDITY("TargetRelativeHumidity"),
 
     LEAK_DETECTED_STATE("LeakDetectedState"),
@@ -64,6 +65,10 @@ public enum HomekitCharacteristicType {
     CURRENT_VERTICAL_TILT_ANGLE("CurrentVerticalTiltAngle"),
     TARGET_HORIZONTAL_TILT_ANGLE("TargetHorizontalTiltAngle"),
     TARGET_VERTICAL_TILT_ANGLE("TargetVerticalTiltAngle"),
+
+    CURRENT_SLAT_STATE("CurrentSlatState"),
+    CURRENT_TILT_ANGLE("CurrentTiltAngle"),
+    TARGET_TILT_ANGLE("TargetTiltAngle"),
 
     HUE("Hue"),
     BRIGHTNESS("Brightness"),
@@ -109,6 +114,14 @@ public enum HomekitCharacteristicType {
     PM25_DENSITY("PM25Density"),
     PM10_DENSITY("PM10Density"),
     VOC_DENSITY("VOCDensity"),
+
+    TARGET_AIR_PURIFIER_STATE("TargetAirPurifierState"),
+    CURRENT_AIR_PURIFIER_STATE("CurrentAirPurifierState"),
+    TARGET_HUMIDIFIER_DEHUMIDIFIER_STATE("TargetHumidifierState"),
+    CURRENT_HUMIDIFIER_DEHUMIDIFIER_STATE("CurrentHumidifierState"),
+    HUMIDIFIER_THRESHOLD_HUMIDITY("HumidifierThresholdHumidity"),
+    DEHUMIDIFIER_THRESHOLD_HUMIDITY("DehumidifierThresholdHumidity"),
+    WATER_LEVEL("WaterLevel"),
 
     @Deprecated()
     OLD_BATTERY_LEVEL("homekit:BatteryLevel"),

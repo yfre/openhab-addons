@@ -101,6 +101,9 @@ public enum HomekitCharacteristicType {
     COOLING_THRESHOLD_TEMPERATURE("CoolingThresholdTemperature"),
     HEATING_THRESHOLD_TEMPERATURE("HeatingThresholdTemperature"),
 
+    TARGET_AIR_PURIFIER_STATE("TargetAirPurifierState"),
+    CURRENT_AIR_PURIFIER_STATE("CurrentAirPurifierState"),
+
     AIR_QUALITY("AirQuality"),
     OZONE_DENSITY("OzoneDensity"),
     NITROGEN_DIOXIDE_DENSITY("NitrogenDioxideDensity"),

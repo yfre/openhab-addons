@@ -21,6 +21,7 @@ HomeKit integration supports following accessory types:
 - Motorized Window
 - Window Covering/Blinds
 - Valve
+- Air Purifier
 - Air Quality Sensor
 - Contact Sensor
 - Leak Sensor
@@ -319,6 +320,14 @@ Switch light2 "Light 2" (gLight) {homekit="Lighting.OnState"}
 |                      |                             | LockControl                  | Number, Switch           | status of physical control lock.  values: 0/OFF=CONTROL LOCK DISABLED, 1/ON=CONTROL LOCK ENABLED                                                                                                                                                                                                          |
 |                      |                             | CoolingThresholdTemperature  | Number                   | maximum temperature that must be reached before cooling is turned on. min/max/step can configured at item level, e.g. minValue=10.5, maxValue=50, step=2]                                                    |
 |                      |                             | HeatingThresholdTemperature  | Number                   | minimum temperature that must be reached before heating is turned on. min/max/step can configured at item level, e.g. minValue=10.5, maxValue=50, step=2]            |
+| AirPurifier          |                             |                              |                          | Air purifier device                                                                                                                                                                                                                                      |
+|                      | ActiveStatus                |                              | Switch                   | accessory current working status. A value of "ON"/"OPEN" indicates that the accessory is active and is functioning without any errors.                                                                                                                                                                     |
+|                      | CurrentAirPurifierState     |                              | String                   | current air purifier mode (INACTIVE, IDLE, PURIFYING). Mapping can be redefined at item level, e.g. [PURIFYING="WORKING"]                                                                                                                                                            |
+|                      | TargetAirPurifierState      |                              | String                   | target air purifier mode (AUTO, MANUAL). Mapping can be redefined at item level, e.g. [AUTO="AUTOMATIC"]                                                                                                                                                   |
+|                      |                             | Name                         | String                   | Name of the air purifier                                                                                                                                                                                                                                                                                         |
+|                      |                             | RotationSpeed                | Number                   | fan rotation speed in % (1-100)                                                                                                                                                                                                                                                                           |
+|                      |                             | SwingMode                    | Number, Switch           | swing mode.  values: 0/OFF=SWING DISABLED, 1/ON=SWING ENABLED                                                                                                                                                                                                                                             |
+|                      |                             | LockControl                  | Number, Switch           | status of physical control lock.  values: 0/OFF=CONTROL LOCK DISABLED, 1/ON=CONTROL LOCK ENABLED                                                                                                                                                                                                          |
 | Lock                 |                             |                              |                          | A Lock Mechanism                                                                                                                                                                                                                                                                                          |
 |                      | LockCurrentState            |                              | Switch, Number           | current state of lock mechanism (1/ON=SECURED, 0/OFF=UNSECURED, 2=JAMMED, 3=UNKNOWN)                                                                                                                                                                                                                                              |
 |                      | LockTargetState             |                              | Switch                   | target state of lock mechanism (ON=SECURED, OFF=UNSECURED)                                                                                                                                                                                                                                               |
@@ -485,6 +494,11 @@ String 			cooler_current_mode  	    "Cooler Current Mode" 		        (gCooler) 		
 String 			cooler_target_mode  	    "Cooler Target Mode" 				(gCooler)           {homekit="TargetHeaterCoolerState"}  
 Number 			cooler_cool_thrs 	        "Cooler Cool Threshold Temp [%.1f C]"  	(gCooler)  	    {homekit="CoolingThresholdTemperature" [minValue=10.5, maxValue=50]}
 Number 			cooler_heat_thrs 	        "Cooler Heat Threshold Temp [%.1f C]"  	(gCooler)  	    {homekit="HeatingThresholdTemperature" [minValue=0.5, maxValue=20]}
+
+Group  			gPurifier    				"Air Purifier"       							        {homekit="AirPurifier"}
+Switch          purifier_active 			"Purifier Active" 				(gPurifier) 	        {homekit="ActiveStatus"}
+String 			purifier_current_mode  	    "Purifier Current Mode" 		(gPurifier) 	        {homekit="CurrentAirPurifierState"}          
+String 			purifier_target_mode  	    "Purifier Target Mode" 	     	(gPurifier)             {homekit="TargetAirPurifierState"}  
 ```
 
 ## Accessory Configuration Details

@@ -48,6 +48,7 @@ public enum HomekitAccessoryType {
     HEATER_COOLER("HeaterCooler"),
     LIGHT_SENSOR("LightSensor"),
     AIR_QUALITY_SENSOR("AirQualitySensor"),
+    AIR_PURIFIER("AirPurifier"),
     DUMMY("Dummy"),
     @Deprecated()
     BLINDS("Blinds"),
